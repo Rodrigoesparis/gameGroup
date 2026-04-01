@@ -73,27 +73,26 @@ public class ParticipantService {
     // ── Salir de un grupo ─────────────────────────────────────────────────────
 
     public void salirDelGrupo(Integer userId, Integer groupId) {
-        Participant participant = participantRepository.findByUserIdUserAndGroupIdGroup(userId, groupId);
+    Participant participant = participantRepository.findByUserIdUserAndGroupIdGroup(userId, groupId);
 
-        if (participant == null) {
-            throw new IllegalArgumentException("No estás en ese grupo.");
-        }
-
-        boolean eraLider = participant.getRole() == Role.LIDER;
-
-        participantRepository.delete(participant);
-
-        if (eraLider) {
-            int restantes = participantRepository.countByGroupIdGroup(groupId);
-            if (restantes > 0) {
-                // Transferir liderazgo: primero a un admin, si no al primer miembro
-                gameGroupService.transferirLiderazgoAlSiguiente(groupId, userId);
-            } else {
-                // Nadie queda → el grupo desaparece
-                groupRepository.deleteById(groupId);
-            }
-        }
+    if (participant == null) {
+        throw new IllegalArgumentException("No estás en ese grupo.");
     }
+
+    boolean eraLider = participant.getRole() == Role.LIDER;
+
+    participantRepository.delete(participant);
+
+    int restantes = participantRepository.countByGroupIdGroup(groupId);
+
+    if (restantes == 0) {
+        // Nadie queda → el grupo desaparece
+        groupRepository.deleteById(groupId);
+    } else if (eraLider) {
+        // Quedan miembros pero se fue el líder → transferir liderazgo
+        gameGroupService.transferirLiderazgoAlSiguiente(groupId, userId);
+    }
+}
 
     // ── Expulsar a un usuario (la lógica de permisos está en el controlador) ──
 

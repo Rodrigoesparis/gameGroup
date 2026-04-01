@@ -102,11 +102,11 @@ public class ParticipantController {
     // ── Ver en qué grupo está un usuario ─────────────────────────────────────
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getUserGroup(@PathVariable Integer userId) {
-        Participant p = participantService.obtenerGrupoDeUsuario(userId);
-        if (p == null) {
-            return ResponseEntity.ok("El usuario no está en ningún grupo.");
-        }
-        return ResponseEntity.ok(p);
+public ResponseEntity<?> getUserGroup(@PathVariable Integer userId) {
+    Participant p = participantService.obtenerGrupoDeUsuario(userId);
+    if (p == null) {
+        return ResponseEntity.notFound().build();
     }
+    return ResponseEntity.ok(p);
+}
 }
