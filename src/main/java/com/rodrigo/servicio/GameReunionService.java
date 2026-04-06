@@ -7,10 +7,10 @@ import com.rodrigo.repositorio.*;
 import java.util.List;
 
 @Service
-public class GameGroupService {
+public class GameReunionService {
 
     @Autowired
-    private GameGroupRepository groupRepository;
+    private GameReunionRepository groupRepository;
 
     @Autowired
     private ParticipantRepository participantRepository;
@@ -20,7 +20,7 @@ public class GameGroupService {
 
     // ── Crear grupo ───────────────────────────────────────────────────────────
 
-    public GameGroup crearGrupo(Integer creatorId, String name, String game,
+    public GameReunion crearGrupo(Integer creatorId, String name, String game,
                                  String mode, Privacy privacy, String password,
                                  Integer maxPlayers) {
 
@@ -35,7 +35,7 @@ public class GameGroupService {
             throw new IllegalArgumentException("Un grupo privado con contraseña debe tener una contraseña.");
         }
 
-        GameGroup group = new GameGroup();
+        GameReunion group = new GameReunion();
         group.setName(name);
         group.setGame(game);
         group.setMode(mode);
@@ -58,29 +58,29 @@ public class GameGroupService {
 
     // ── Listar grupos con info extra ──────────────────────────────────────────
 
-    public List<GameGroupDTO> listarGruposConInfo() {
+    public List<GameReunionDTO> listarGruposConInfo() {
         return groupRepository.findAll().stream().map(group -> {
             int currentPlayers = participantRepository.countByGroupIdGroup(group.getIdGroup());
-            return new GameGroupDTO(group, currentPlayers);
+            return new GameReunionDTO(group, currentPlayers);
         }).toList();
     }
 
-    public List<GameGroup> listarGrupos() {
+    public List<GameReunion> listarGrupos() {
         return groupRepository.findAll();
     }
 
-    public GameGroup buscarPorId(Integer groupId) {
+    public GameReunion buscarPorId(Integer groupId) {
         return groupRepository.findById(groupId)
             .orElseThrow(() -> new IllegalArgumentException("Grupo no encontrado."));
     }
 
     // ── Actualizar info del grupo (líder o admin) ─────────────────────────────
 
-    public GameGroup actualizarGrupo(Integer groupId, String name, String game,
+    public GameReunion actualizarGrupo(Integer groupId, String name, String game,
                                       String mode, Privacy privacy,
                                       String password, Integer maxPlayers) {
 
-        GameGroup group = buscarPorId(groupId);
+        GameReunion group = buscarPorId(groupId);
 
         if (name != null && !name.isBlank())     group.setName(name);
         if (game != null && !game.isBlank())     group.setGame(game);
@@ -161,7 +161,7 @@ public class GameGroupService {
 
     // ── DTO para listado de grupos ────────────────────────────────────────────
 
-    public static class GameGroupDTO {
+    public static class GameReunionDTO {
         public Integer idGroup;
         public String name;
         public String game;
@@ -170,7 +170,7 @@ public class GameGroupService {
         public Integer maxPlayers;
         public int currentPlayers;
 
-        public GameGroupDTO(GameGroup g, int current) {
+        public GameReunionDTO(GameReunion g, int current) {
             this.idGroup = g.getIdGroup();
             this.name = g.getName();
             this.game = g.getGame();

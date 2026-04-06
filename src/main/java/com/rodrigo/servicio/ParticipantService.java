@@ -16,10 +16,10 @@ public class ParticipantService {
     private UserRepository userRepository;
 
     @Autowired
-    private GameGroupRepository groupRepository;
+    private GameReunionRepository groupRepository;
 
     @Autowired
-    private GameGroupService gameGroupService;
+    private GameReunionService GameReunionService;
 
     // ── Unirse a un grupo ─────────────────────────────────────────────────────
 
@@ -28,7 +28,7 @@ public class ParticipantService {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado."));
 
-        GameGroup group = groupRepository.findById(groupId)
+        GameReunion group = groupRepository.findById(groupId)
             .orElseThrow(() -> new IllegalArgumentException("Grupo no encontrado."));
 
         // Un usuario solo puede estar en un grupo a la vez
@@ -90,7 +90,7 @@ public class ParticipantService {
         groupRepository.deleteById(groupId);
     } else if (eraLider) {
         // Quedan miembros pero se fue el líder → transferir liderazgo
-        gameGroupService.transferirLiderazgoAlSiguiente(groupId, userId);
+        GameReunionService.transferirLiderazgoAlSiguiente(groupId, userId);
     }
 }
 

@@ -4,16 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.rodrigo.modelo.*;
-import com.rodrigo.servicio.GameGroupService;
+import com.rodrigo.servicio.GameReunionService;
 import com.rodrigo.repositorio.ParticipantRepository;
 import java.util.List;
 
 @RestController
 @RequestMapping("/groups")
-public class GameGroupController {
+public class GameReunionController {
 
     @Autowired
-    private GameGroupService gameGroupService;
+    private GameReunionService GameReunionService;
 
     @Autowired
     private ParticipantRepository participantRepository;
@@ -23,7 +23,7 @@ public class GameGroupController {
     @PostMapping
     public ResponseEntity<?> createGroup(@RequestBody CreateGroupRequest req) {
         try {
-            GameGroup group = gameGroupService.crearGrupo(
+            GameReunion group = GameReunionService.crearGrupo(
                 req.creatorId, req.name, req.game,
                 req.mode, req.privacy, req.password, req.maxPlayers
             );
@@ -36,8 +36,8 @@ public class GameGroupController {
     // ── Listar todos los grupos ───────────────────────────────────────────────
 
     @GetMapping
-    public List<GameGroupService.GameGroupDTO> getAllGroups() {
-        return gameGroupService.listarGruposConInfo();
+    public List<GameReunionService.GameReunionDTO> getAllGroups() {
+        return GameReunionService.listarGruposConInfo();
     }
 
     // ── Ver detalle de un grupo ───────────────────────────────────────────────
@@ -45,7 +45,7 @@ public class GameGroupController {
     @GetMapping("/{groupId}")
     public ResponseEntity<?> getGroup(@PathVariable Integer groupId) {
         try {
-            return ResponseEntity.ok(gameGroupService.buscarPorId(groupId));
+            return ResponseEntity.ok(GameReunionService.buscarPorId(groupId));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -59,7 +59,7 @@ public class GameGroupController {
                                           @RequestBody UpdateGroupRequest req) {
         try {
             verificarLiderOAdmin(requesterId, groupId);
-            GameGroup updated = gameGroupService.actualizarGrupo(
+            GameReunion updated = GameReunionService.actualizarGrupo(
                 groupId, req.name, req.game, req.mode,
                 req.privacy, req.password, req.maxPlayers
             );
@@ -76,7 +76,7 @@ public class GameGroupController {
                                              @RequestParam Integer liderActualId,
                                              @RequestParam Integer nuevoLiderId) {
         try {
-            gameGroupService.transferirLiderazgo(groupId, liderActualId, nuevoLiderId);
+            GameReunionService.transferirLiderazgo(groupId, liderActualId, nuevoLiderId);
             return ResponseEntity.ok("Liderazgo transferido correctamente.");
         } catch (IllegalArgumentException | IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -91,7 +91,7 @@ public class GameGroupController {
                                              @RequestParam Integer targetUserId) {
         try {
             verificarLider(liderActualId, groupId);
-            gameGroupService.cambiarRol(groupId, targetUserId, Role.ADMIN);
+            GameReunionService.cambiarRol(groupId, targetUserId, Role.ADMIN);
             return ResponseEntity.ok("Usuario ascendido a admin.");
         } catch (IllegalArgumentException | IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -106,7 +106,7 @@ public class GameGroupController {
                                              @RequestParam Integer targetUserId) {
         try {
             verificarLider(liderActualId, groupId);
-            gameGroupService.cambiarRol(groupId, targetUserId, Role.MIEMBRO);
+            GameReunionService.cambiarRol(groupId, targetUserId, Role.MIEMBRO);
             return ResponseEntity.ok("Admin degradado a miembro.");
         } catch (IllegalArgumentException | IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -119,7 +119,7 @@ public class GameGroupController {
     public ResponseEntity<?> deleteGroup(@PathVariable Integer groupId,
                                           @RequestParam Integer requesterId) {
         try {
-            gameGroupService.eliminarGrupo(groupId, requesterId);
+            GameReunionService.eliminarGrupo(groupId, requesterId);
             return ResponseEntity.ok("Grupo eliminado.");
         } catch (IllegalArgumentException | IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

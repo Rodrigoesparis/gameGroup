@@ -15,7 +15,7 @@ public class Participant {
  @Id
  @ManyToOne
  @JoinColumn(name = "group_id")
- private GameGroup group;
+ private GameReunion group;
 
  @Enumerated(EnumType.STRING)
  private Role role = Role.MIEMBRO;
@@ -28,11 +28,11 @@ public void setUser(User user) {
 	this.user = user;
 }
 
-public GameGroup getGroup() {
+public GameReunion getGroup() {
 	return group;
 }
 
-public void setGroup(GameGroup group) {
+public void setGroup(GameReunion group) {
 	this.group = group;
 }
 

@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class MenuConsola implements CommandLineRunner {
 
     @Autowired private UserService userService;
-    @Autowired private GameGroupService gameGroupService;
+    @Autowired private GameReunionService GameReunionService;
     @Autowired private ParticipantService participantService;
     @Autowired private ParticipantRepository participantRepository;
 
@@ -75,7 +75,7 @@ public class MenuConsola implements CommandLineRunner {
             }
         } else {
             // Estoy en un grupo
-            GameGroup grupo = miGrupo.getGroup();
+            GameReunion grupo = miGrupo.getGroup();
             Role rol = miGrupo.getRole();
             System.out.println("Grupo: " + grupo.getName() + " | Juego: " + grupo.getGame()
                     + " | Rol: " + rol);
@@ -139,7 +139,7 @@ public class MenuConsola implements CommandLineRunner {
     }
 
     private void verGrupos() {
-        List<GameGroupService.GameGroupDTO> grupos = gameGroupService.listarGruposConInfo();
+        List<GameReunionService.GameReunionDTO> grupos = GameReunionService.listarGruposConInfo();
         if (grupos.isEmpty()) {
             System.out.println("No hay grupos disponibles.");
             return;
@@ -181,7 +181,7 @@ public class MenuConsola implements CommandLineRunner {
             }
             System.out.print("Máximo de jugadores: "); Integer maxPlayers = Integer.parseInt(sc.nextLine());
 
-            GameGroup g = gameGroupService.crearGrupo(
+            GameReunion g = GameReunionService.crearGrupo(
                 usuarioActivo.getIdUser(), name, game, mode, privacy, password, maxPlayers
             );
             System.out.println("✓ Grupo creado con ID: " + g.getIdGroup());
@@ -220,7 +220,7 @@ public class MenuConsola implements CommandLineRunner {
             System.out.print("Nuevo máximo jugadores: "); String maxStr = sc.nextLine();
             Integer maxPlayers = maxStr.isBlank() ? null : Integer.parseInt(maxStr);
 
-            gameGroupService.actualizarGrupo(groupId,
+            GameReunionService.actualizarGrupo(groupId,
                 name.isBlank() ? null : name,
                 game.isBlank() ? null : game,
                 mode.isBlank() ? null : mode,
@@ -238,7 +238,7 @@ public class MenuConsola implements CommandLineRunner {
         try {
             verParticipantes(groupId);
             System.out.print("ID del nuevo líder: "); Integer nuevoLiderId = Integer.parseInt(sc.nextLine());
-            gameGroupService.transferirLiderazgo(groupId, usuarioActivo.getIdUser(), nuevoLiderId);
+            GameReunionService.transferirLiderazgo(groupId, usuarioActivo.getIdUser(), nuevoLiderId);
             System.out.println("✓ Liderazgo transferido.");
         } catch (Exception e) {
             System.out.println("✗ Error: " + e.getMessage());
@@ -249,7 +249,7 @@ public class MenuConsola implements CommandLineRunner {
         try {
             verParticipantes(groupId);
             System.out.print("ID del usuario a ascender: "); Integer targetId = Integer.parseInt(sc.nextLine());
-            gameGroupService.cambiarRol(groupId, targetId, Role.ADMIN);
+            GameReunionService.cambiarRol(groupId, targetId, Role.ADMIN);
             System.out.println("✓ Usuario ascendido a admin.");
         } catch (Exception e) {
             System.out.println("✗ Error: " + e.getMessage());
@@ -271,7 +271,7 @@ public class MenuConsola implements CommandLineRunner {
         try {
             System.out.print("¿Seguro que quieres eliminar el grupo? (s/n): ");
             if (sc.nextLine().trim().equalsIgnoreCase("s")) {
-                gameGroupService.eliminarGrupo(groupId, usuarioActivo.getIdUser());
+                GameReunionService.eliminarGrupo(groupId, usuarioActivo.getIdUser());
                 System.out.println("✓ Grupo eliminado.");
             }
         } catch (Exception e) {

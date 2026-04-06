@@ -26,7 +26,7 @@ public class User {
     //Relacion con el grupo para creador
     @OneToMany(mappedBy = "creator")
     @JsonIgnore
-    private List<GameGroup> createdGroups;
+    private List<GameReunion> createdGroups;
     //Relacion usuarios con participantes
     @OneToMany(mappedBy = "user")
     @JsonIgnore
@@ -75,10 +75,10 @@ public class User {
 	public void setAge(Integer age) {
 		this.age = age;
 	}
-	public List<GameGroup> getCreatedGroups() {
+	public List<GameReunion> getCreatedGroups() {
 		return createdGroups;
 	}
-	public void setCreatedGroups(List<GameGroup> createdGroups) {
+	public void setCreatedGroups(List<GameReunion> createdGroups) {
 		this.createdGroups = createdGroups;
 	}
 	public List<Participant> getParticipants() {

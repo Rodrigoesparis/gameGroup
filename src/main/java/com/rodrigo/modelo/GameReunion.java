@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "game_groups")
-public class GameGroup {
+public class GameReunion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

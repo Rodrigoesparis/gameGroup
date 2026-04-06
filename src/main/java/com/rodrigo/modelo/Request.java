@@ -17,7 +17,7 @@ public class Request {
 
  @ManyToOne
  @JoinColumn(name = "group_id")
- private GameGroup group;
+ private GameReunion group;
 
  @Enumerated(EnumType.STRING)
  private RequestStatus status = RequestStatus.PENDIENTE;
@@ -44,11 +44,11 @@ public void setUser(User user) {
 	this.user = user;
 }
 
-public GameGroup getGroup() {
+public GameReunion getGroup() {
 	return group;
 }
 
-public void setGroup(GameGroup group) {
+public void setGroup(GameReunion group) {
 	this.group = group;
 }
 
