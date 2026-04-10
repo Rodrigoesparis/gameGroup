@@ -2,6 +2,8 @@ package com.rodrigo.servicio;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.rodrigo.controlador.GroupEventController;
 import com.rodrigo.modelo.*;
 import com.rodrigo.repositorio.*;
 import java.util.List;
@@ -17,6 +19,9 @@ public class GameReunionService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+private GroupEventController groupEventController;
 
     // ── Crear grupo ───────────────────────────────────────────────────────────
 
@@ -52,6 +57,8 @@ public class GameReunionService {
         lider.setGroup(group);
         lider.setRole(Role.LIDER);
         participantRepository.save(lider);
+
+        groupEventController.notifyGroupUpdate(group.getIdGroup(), "CREATED");
 
         return group;
     }

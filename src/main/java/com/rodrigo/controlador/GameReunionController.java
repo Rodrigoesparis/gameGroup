@@ -18,7 +18,7 @@ public class GameReunionController {
     @Autowired
     private ParticipantRepository participantRepository;
 
-    // ── Crear grupo ───────────────────────────────────────────────────────────
+    //Crear grupo
 
     @PostMapping
     public ResponseEntity<?> createGroup(@RequestBody CreateGroupRequest req) {
@@ -33,14 +33,14 @@ public class GameReunionController {
         }
     }
 
-    // ── Listar todos los grupos ───────────────────────────────────────────────
+    // Listar miembros del grupo
 
     @GetMapping
     public List<GameReunionService.GameReunionDTO> getAllGroups() {
         return GameReunionService.listarGruposConInfo();
     }
 
-    // ── Ver detalle de un grupo ───────────────────────────────────────────────
+    // Detalles del grupo
 
     @GetMapping("/{groupId}")
     public ResponseEntity<?> getGroup(@PathVariable Integer groupId) {
@@ -51,7 +51,7 @@ public class GameReunionController {
         }
     }
 
-    // ── Modificar info del grupo (líder o admin) ──────────────────────────────
+    // Modificar grupo
 
     @PutMapping("/{groupId}")
     public ResponseEntity<?> updateGroup(@PathVariable Integer groupId,
@@ -69,7 +69,7 @@ public class GameReunionController {
         }
     }
 
-    // ── Transferir liderazgo (solo líder) ────────────────────────────────────
+    //Cambiar liderazgo
 
     @PostMapping("/{groupId}/transfer-leader")
     public ResponseEntity<?> transferLeader(@PathVariable Integer groupId,

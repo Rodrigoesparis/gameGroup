@@ -2,6 +2,8 @@ package com.rodrigo.servicio;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.rodrigo.controlador.GroupEventController;
 import com.rodrigo.modelo.*;
 import com.rodrigo.repositorio.*;
 import java.util.List;
@@ -20,6 +22,9 @@ public class ParticipantService {
 
     @Autowired
     private GameReunionService GameReunionService;
+
+    @Autowired
+private GroupEventController groupEventController;
 
     // ── Unirse a un grupo ─────────────────────────────────────────────────────
 
@@ -67,6 +72,8 @@ public class ParticipantService {
         participant.setGroup(group);
         participant.setRole(Role.MIEMBRO);
 
+        groupEventController.notifyGroupUpdate(groupId, "MEMBER_JOINED");
+
         return participantRepository.save(participant);
     }
 
@@ -82,6 +89,8 @@ public class ParticipantService {
     boolean eraLider = participant.getRole() == Role.LIDER;
 
     participantRepository.delete(participant);
+
+    groupEventController.notifyGroupUpdate(groupId, "MEMBER_LEFT");
 
     int restantes = participantRepository.countByGroupIdGroup(groupId);
 

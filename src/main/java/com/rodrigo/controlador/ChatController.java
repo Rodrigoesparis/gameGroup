@@ -27,6 +27,7 @@ public class ChatController {
     @Autowired
     private GameReunionRepository groupRepository;
 
+//ENDPOINT mensajes mandar recivir y guardar
     @MessageMapping("/chat/{groupId}")
     @SendTo("/topic/chat/{groupId}")
     public ChatMessage sendMessage(
@@ -44,7 +45,7 @@ public class ChatController {
         return message;
     }
 
-    // Endpoint REST para cargar historial
+    //ENDPOINT para cargar el historial y aparezcan siempre mensajes antiguos
     @GetMapping("/chat/{groupId}/history")
     @org.springframework.web.bind.annotation.ResponseBody
     public ResponseEntity<List<ChatMessage>> getHistory(
